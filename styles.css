@@ -28,7 +28,7 @@ header{
 }
 #grid{
     display: grid;
-    width: 500px;
-    height: 500px;
+    width: 80vh;
+    height: 80vh;
     background-color: #ccc;
 }
