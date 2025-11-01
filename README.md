@@ -2,6 +2,7 @@ Etch-a-Sketch (Lousa mágica)
 ===========================
 
 Aplicação simples de desenho em grade feita com HTML, CSS e JavaScript.
+[https://allanlucn.github.io/Etch-a-Sketch/](Acesse)
 
 O que o programa faz
 --------------------
