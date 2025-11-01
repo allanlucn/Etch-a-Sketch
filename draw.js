@@ -3,6 +3,7 @@ const clearButton = document.querySelector("#clearButton");
 const rainbowMode = document.querySelector("#rainbowMode");
 const eraserMode = document.querySelector("#eraserMode");
 const canvasSizeButton = document.querySelector("#canvasSize");
+const gridLines = document.querySelector("#gridLines");
 
 gridContainer.addEventListener("dragstart", (event) => {
     event.preventDefault(); 
@@ -22,6 +23,17 @@ eraserMode.addEventListener("change", () => {
     }
 });
 
+gridLines.addEventListener("change", () => {
+    const pannels = gridContainer.querySelectorAll('.pannel');
+    pannels.forEach(pannel => {
+        if(gridLines.checked) {
+            pannel.style.border = 'solid 0.1px black';
+        } else {
+            pannel.style.border = 'none';
+        }
+    });
+});
+
 gridContainer.addEventListener("mousedown", () => {
     mouseDown = true;
 });
@@ -31,6 +43,14 @@ gridContainer.addEventListener("mouseup", () => {
 });
 
 gridContainer.addEventListener("mouseleave", () => {
+    mouseDown = false;
+});
+
+gridContainer.addEventListener("touchstart", () => {
+    mouseDown = true;
+});
+
+gridContainer.addEventListener("touchend", () => {
     mouseDown = false;
 });
 
@@ -46,7 +66,8 @@ function createPannels(size){
             const pannel = document.createElement('div');
             pannel.classList.add('pannel');
             coluna.appendChild(pannel);
-            pannel.addEventListener('mouseenter',(event) => {
+            
+            const handleDraw = (event) => {
                 if(mouseDown){
                     if(rainbowMode.checked){
                         pannel.style.backgroundColor = randomColor();
@@ -56,7 +77,24 @@ function createPannels(size){
                         pannel.style.backgroundColor = document.querySelector("#colorPicker").value;
                     }
                 }
+            };
+            
+            pannel.addEventListener('mouseenter', handleDraw);
+            pannel.addEventListener('touchmove', (event) => {
+                event.preventDefault();
+                const touch = event.touches[0];
+                const element = document.elementFromPoint(touch.clientX, touch.clientY);
+                if(element && element.classList.contains('pannel') && mouseDown){
+                    if(rainbowMode.checked){
+                        element.style.backgroundColor = randomColor();
+                    } else if(eraserMode.checked){
+                        element.style.backgroundColor = 'white';
+                    } else {
+                        element.style.backgroundColor = document.querySelector("#colorPicker").value;
+                    }
+                }
             });
+            pannel.addEventListener('touchstart', handleDraw);
         }
         gridContainer.appendChild(coluna);
     }
